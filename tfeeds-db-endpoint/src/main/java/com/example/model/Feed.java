@@ -51,10 +51,12 @@ public class Feed implements Serializable {
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime lastSeen;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime timestamp;
 
 	private Period validityPeriod;

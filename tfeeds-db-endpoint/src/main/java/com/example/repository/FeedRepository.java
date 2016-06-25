@@ -17,6 +17,16 @@ public interface FeedRepository extends JpaRepository<Feed, String> {
 	List<Feed> findByType(@Param("type") String type);
 
 	List<Feed> findByTypeAndFirstSeen(@Param("type") String type, @Param("firstSeen") String firstSeen);
+	
+	List<Feed> findByThreatType_BruteForce(@Param("isBruteForce") boolean type);
+	
+	List<Feed> findByThreatType_Malware(@Param("isMalware") boolean type);
+	List<Feed> findByThreatType_Web(@Param("isWeb") boolean type);
+	List<Feed> findByThreatType_Sip(@Param("isSip") boolean type);
+	List<Feed> findByThreatType_PossibleCompromise(@Param("isPossibleCompromise") boolean type);
+	List<Feed> findByThreatType_Db(@Param("isDb") boolean type);
+	List<Feed> findByThreatType_Recon(@Param("isRecon") boolean type);
+	
 
 	List<Feed> findByFirstSeenBefore(@Param("firstSeen") 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime firstSeen);
@@ -25,5 +35,21 @@ public interface FeedRepository extends JpaRepository<Feed, String> {
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime begin,
 	@Param("end")
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime end );
+	
+	
+	List<Feed> findByConfidenceLessThan(@Param("confidenceLessThan") double confidence);
+	List<Feed> findByConfidenceGreaterThan(@Param("confidenceGreaterThan") double confidence);
+	List<Feed> findByConfidenceIs(@Param("confidenceIs") double confidence);
+	
+	
+	List<Feed> findByRiskFactorLessThan(@Param("riskFactorLessThan") double riskFactor);
+	List<Feed> findByRiskFactorGreaterThan(@Param("riskFactorGreaterThan") double riskFactor);
+	List<Feed> findByRiskFactorIs(@Param("riskFactorIs") double riskFactor);
+	
+	
+	
+	// riskfactor less than && greater than
+	// threat type == 
+	// confidence
 
 }
