@@ -2,7 +2,6 @@ package com.example.model;
 
 import java.io.Serializable;
 
-
 public class IncidentStats implements Serializable {
 
 	/**
