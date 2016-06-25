@@ -1,12 +1,14 @@
 package com.example.repository;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.ws.rs.QueryParam;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.model.Feed;
@@ -42,9 +44,14 @@ public interface FeedRepository extends JpaRepository<Feed, String> {
 	List<Feed> findByConfidenceIs(@Param("confidenceIs") double confidence);
 	
 	
-	List<Feed> findByRiskFactorLessThan(@Param("riskFactorLessThan") double riskFactor);
-	List<Feed> findByRiskFactorGreaterThan(@Param("riskFactorGreaterThan") double riskFactor);
+	
+	
+	@RestResource(path = "riskFactor")
 	List<Feed> findByRiskFactorIs(@Param("riskFactorIs") double riskFactor);
+	//@RestResource(path = "riskFactor")
+	List<Feed> findByRiskFactorLessThan(@Param("riskFactorLessThan") double riskFactor);
+	//@RestResource(path = "riskFactor")
+	List<Feed> findByRiskFactorGreaterThan(@Param("riskFactorGreaterThan") double riskFactor);
 	
 	
 	
