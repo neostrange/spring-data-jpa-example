@@ -2,7 +2,6 @@ package com.example.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.Period;
 
 import javax.persistence.Convert;
 import javax.persistence.Embedded;
@@ -14,6 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.util.LocalDateTimeAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 @Entity
 public class Feed implements Serializable {
@@ -46,21 +47,25 @@ public class Feed implements Serializable {
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime firstSeen;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime lastSeen;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime timestamp;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime expiry;
 
