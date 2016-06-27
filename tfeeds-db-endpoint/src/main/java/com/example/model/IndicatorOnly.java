@@ -1,5 +1,7 @@
 package com.example.model;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.rest.core.config.Projection;
 
 
@@ -8,6 +10,7 @@ public interface IndicatorOnly {
 	
 	String getIndicator();
 	Double getRiskFactor();
+    LocalDateTime getExpiry();
 	
 
 }

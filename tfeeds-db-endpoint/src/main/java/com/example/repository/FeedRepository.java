@@ -47,6 +47,23 @@ public interface FeedRepository extends CrudRepository<Feed, String> {
 	List<Feed> findByTypeAndThreatType_MalwareAndConfidenceGreaterThan(@Param("type") String type, 
 			@Param("isMalware") boolean value,
 			@Param("confidenceLessThan") double confidence);
+	
+	List<Feed> findByTypeAndThreatType_ReconAndRiskFactorGreaterThan(@Param("type") String type, 
+			@Param("isRecon") boolean value,
+			@Param("riskGreaterThan") double riskFactor);
+	
+	List<Feed> findByTypeAndThreatType_ReconAndRiskFactorLessThan(@Param("type") String type, 
+			@Param("isRecon") boolean value,
+			@Param("riskLessThan") double riskFactor);
+	
+	
+	List<Feed> findByTypeAndThreatType_MalwareAndRiskFactorLessThan(@Param("type") String type, 
+			@Param("isMalware") boolean value,
+			@Param("riskLessThan") double riskFactor);
+	
+	List<Feed> findByTypeAndThreatType_MalwareAndRiskFactorGreaterThan(@Param("type") String type, 
+			@Param("isMalware") boolean value,
+			@Param("riskGreaterThan") double riskFactor);
 
 	List<Feed> findByFirstSeenBefore(@Param("firstSeen") 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime firstSeen);
@@ -72,6 +89,10 @@ public interface FeedRepository extends CrudRepository<Feed, String> {
 	List<Feed> findByRiskFactorGreaterThan(@Param("riskFactorGreaterThan") double riskFactor);
 	
 	List<IndicatorOnly> findProjectedByType(@Param("type") String type);
+	
+	
+	
+
 	
 	// riskfactor less than && greater than
 	// threat type == 

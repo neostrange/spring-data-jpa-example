@@ -59,7 +59,19 @@ public class Feed implements Serializable {
 	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime timestamp;
 
-	private Period validityPeriod;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
+	private LocalDateTime expiry;
+
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	public LocalDateTime getExpiry() {
+		return expiry;
+	}
+
+	public void setExpiry(LocalDateTime expiry) {
+		this.expiry = expiry;
+	}
 
 	private double riskFactor;
 
@@ -127,6 +139,7 @@ public class Feed implements Serializable {
 		this.description = description;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public LocalDateTime getFirstSeen() {
 		return firstSeen;
 	}
@@ -135,6 +148,7 @@ public class Feed implements Serializable {
 		this.firstSeen = firstSeen;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public LocalDateTime getLastSeen() {
 		return lastSeen;
 	}
@@ -143,7 +157,7 @@ public class Feed implements Serializable {
 		this.lastSeen = lastSeen;
 	}
 
-	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
@@ -152,13 +166,6 @@ public class Feed implements Serializable {
 		this.timestamp = timestamp;
 	}
 
-	public Period getValidityPeriod() {
-		return validityPeriod;
-	}
-
-	public void setValidityPeriod(Period validityPeriod) {
-		this.validityPeriod = validityPeriod;
-	}
 
 	public double getRiskFactor() {
 		return riskFactor;
