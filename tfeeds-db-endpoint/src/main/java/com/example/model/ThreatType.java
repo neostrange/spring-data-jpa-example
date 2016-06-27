@@ -2,30 +2,38 @@ package com.example.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import com.example.Constants;
 
 @Embeddable
 public class ThreatType implements Serializable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -985629024450006237L;
 
+	@Column(nullable = true)
 	private boolean recon;
-	
+
+	@Column(nullable = true)
 	private boolean malware;
-	
+
+	@Column(nullable = true)
 	private boolean web;
-	
+
+	@Column(nullable = true)
 	private boolean sip;
-	
+
+	@Column(nullable = true)
 	private boolean bruteForce;
-	
+
+	@Column(nullable = true)
 	private boolean possibleCompromise;
-	
+
+	@Column(nullable = true)
 	private boolean db;
 
 	public ThreatType() {
@@ -93,8 +101,8 @@ public class ThreatType implements Serializable {
 	public void setDb(boolean db) {
 		this.db = db;
 	}
-	
-	public void update(String category){
+
+	public void update(String category) {
 		switch (category) {
 		case Constants.RECONNAISSANCE:
 			this.setRecon(true);
@@ -125,7 +133,5 @@ public class ThreatType implements Serializable {
 		}
 
 	}
-	
-	
 
 }
