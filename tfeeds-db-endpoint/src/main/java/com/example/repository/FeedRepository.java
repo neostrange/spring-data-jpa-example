@@ -4,15 +4,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.model.Feed;
+import com.example.model.IndicatorOnly;
+
 
 @RepositoryRestResource(collectionResourceRel = "feed", path = "feed")
-public interface FeedRepository extends JpaRepository<Feed, String> {
+
+
+public interface FeedRepository extends CrudRepository<Feed, String> {
 
 	List<Feed> findByType(@Param("type") String type);
 
@@ -66,7 +71,7 @@ public interface FeedRepository extends JpaRepository<Feed, String> {
 	//@RestResource(path = "riskFactor")
 	List<Feed> findByRiskFactorGreaterThan(@Param("riskFactorGreaterThan") double riskFactor);
 	
-	
+	List<IndicatorOnly> findProjectedByType(@Param("type") String type);
 	
 	// riskfactor less than && greater than
 	// threat type == 
