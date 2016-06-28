@@ -23,46 +23,50 @@ public interface FeedRepository extends CrudRepository<Feed, String> {
 
 	// find by incident type and threat type
 	@RestResource(path = "malware")
-	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndLastSeenAfter(@Param("type") String type,
-			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	List<Feed> findByTypeAndThreatType_MalwareIsTrue(@Param("type") String type);
 
 	// @Query("select f.indicator, f.expiry from Feed f inner join f.ThreatType
 	// as threat where threat.malware = 'true' AND f.type = 'ip'")
 	// List<IndicatorOnly> findMalwareIPs();
 	@RestResource(path = "web")
-	List<Feed> findByTypeAndThreatType_WebIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	List<Feed> findByTypeAndThreatType_WebIsTrue(@Param("type") String type);
 
 	@RestResource(path = "bruteForce")
-	List<Feed> findByTypeAndThreatType_BruteForceIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	List<Feed> findByTypeAndThreatType_BruteForceIsTrue(@Param("type") String type);
 
 	@RestResource(path = "sip")
-	List<Feed> findByTypeAndThreatType_SipIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	List<Feed> findByTypeAndThreatType_SipIsTrue(@Param("type") String type);
 
 	@RestResource(path = "possibleCompromise")
-	List<Feed> findProjectedByTypeAndThreatType_PossibleCompromiseIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	List<Feed> findProjectedByTypeAndThreatType_PossibleCompromiseIsTrue(@Param("type") String type);
 
 	@RestResource(path = "db")
-	List<Feed> findByTypeAndThreatType_DbIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	List<Feed> findByTypeAndThreatType_DbIsTrue(@Param("type") String type);
 
 	@RestResource(path = "recon")
-	List<Feed> findByTypeAndThreatType_ReconIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	List<Feed> findByTypeAndThreatType_ReconIsTrue(@Param("type") String type);
 
-	// List<Feed> findByThreatType_BruteForce(@Param("isBruteForce") boolean
-	// type);
-	//
-	// List<Feed> findByThreatType_Malware(@Param("isMalware") boolean type);
-	//
-	// List<Feed> findByThreatType_Web(@Param("isWeb") boolean type);
-	//
-	// List<Feed> findByThreatType_Sip(@Param("isSip") boolean type);
-	//
-	// List<Feed>
-	// findByThreatType_PossibleCompromise(@Param("isPossibleCompromise")
-	// boolean type);
-	//
-	// List<Feed> findByThreatType_Db(@Param("isDb") boolean type);
-	//
-	// List<Feed> findByThreatType_Recon(@Param("isRecon") boolean type);
+	@RestResource(path = "malwareSince")
+	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndLastSeenAfter(@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+	
+	@RestResource(path = "webSince")
+	List<Feed> findByTypeAndThreatType_WebIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+
+	@RestResource(path = "bruteForceSince")
+	List<Feed> findByTypeAndThreatType_BruteForceIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+
+	@RestResource(path = "sipSince")
+	List<Feed> findByTypeAndThreatType_SipIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+
+	@RestResource(path = "possibleCompromiseSince")
+	List<Feed> findProjectedByTypeAndThreatType_PossibleCompromiseIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+
+	@RestResource(path = "dbSince")
+	List<Feed> findByTypeAndThreatType_DbIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
+
+	@RestResource(path = "reconSince")
+	List<Feed> findByTypeAndThreatType_ReconIsTrueAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
 
 	@RestResource(path = "malwareConfidenceGreater")
 	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndConfidenceGreaterThan(@Param("type") String type,
