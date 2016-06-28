@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 
-@Projection(name="IndicatorOnly", types=Feed.class)
+@Projection(name="shorten", types=Feed.class)
 public interface IndicatorOnly {
 	
 	String getIndicator();
@@ -20,6 +20,5 @@ public interface IndicatorOnly {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
     LocalDateTime getExpiry();
-	
 
 }
