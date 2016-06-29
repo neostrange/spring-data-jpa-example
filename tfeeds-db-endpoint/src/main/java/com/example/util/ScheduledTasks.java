@@ -17,31 +17,18 @@ import com.example.repository.FeedRepository;
 
 @Component
 public class ScheduledTasks {
-	
+
 	@Autowired
-	private FeedRepository feedRepository;
-	
-	@Autowired
-	IfeedRepository feedRepo;
+	DataLoader dataLoader;
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	
-	@Scheduled(fixedRate = 1000 * 60 * 10)
+	@Scheduled(fixedRate = 1000 * 60 * 3)
 	public void reportCurrentTime() {
-		System.out.println("Synhing with Feeds Repository... \n Start time:  " + dateFormat.format(new Date()));
+		System.out.println("Syncing with Feeds Repository... \n"
+				+ " Start time:  " + dateFormat.format(new Date()));
 
-		Map<Object, Object> feeds = feedRepo.findAllFeeds();
-
-		List<Feed> feedList = new ArrayList<Feed>();
-
-		for (Map.Entry<Object, Object> entry : feeds.entrySet()) {
-
-			feedList.add((Feed) entry.getValue());
-		}
-
-		feedRepository.save(feedList);
-
+		dataLoader.loadFeedsData();
 
 	}
 }
