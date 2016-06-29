@@ -18,6 +18,9 @@ public interface FeedRepository extends CrudRepository<Feed, String> {
 
 	@RestResource(path = "all", description = @Description("Full feed including details"))
 	List<Feed> findByType(@Param("type") String type);
+	
+	@RestResource(path = "allSince", description = @Description("Full feed including details"))
+	List<Feed> findByTypeAndLastSeenAfter(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
 
 	List<Feed> findByTypeAndFirstSeen(@Param("type") String type, @Param("firstSeen") String firstSeen);
 
