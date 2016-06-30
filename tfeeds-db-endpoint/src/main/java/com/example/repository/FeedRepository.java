@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -14,7 +15,7 @@ import com.example.model.Feed;
 import com.example.model.IndicatorOnly;
 
 @RepositoryRestResource(collectionResourceRel = "feed", path = "feed")
-public interface FeedRepository extends CrudRepository<Feed, String> {
+public interface FeedRepository extends PagingAndSortingRepository<Feed, String> {
 
 	@RestResource(path = "all", description = @Description("Full feed including details"))
 	List<Feed> findByType(@Param("type") String type);
