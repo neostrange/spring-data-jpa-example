@@ -132,6 +132,52 @@ public interface FeedRepository extends CrudRepository<Feed, String> {
 			@Param("gt") double riskFactor, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
 	
 	
+	//RiskBetween
+	@RestResource(path = "malwareRiskBtw")
+	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndRiskFactorBetween(@Param("type") String type,
+			@Param("gt") double gt, @Param("lt") double lt);
+	
+	@RestResource(path = "webRiskBtw")
+	List<Feed> findByTypeAndThreatType_WebIsTrueAndRiskFactorBetween(@Param("type") String type, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "bruteForceRiskBtw")
+	List<Feed> findByTypeAndThreatType_BruteForceIsTrueAndRiskFactorBetween(@Param("type") String type, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "sipRiskBtw")
+	List<Feed> findByTypeAndThreatType_SipIsTrueAndRiskFactorBetween(@Param("type") String type, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "possibleCompromiseRiskBtw")
+	List<Feed> findProjectedByTypeAndThreatType_PossibleCompromiseIsTrueAndRiskFactorBetween(@Param("type") String type, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "dbRiskBtw")
+	List<Feed> findByTypeAndThreatType_DbIsTrueAndRiskFactorBetween(@Param("type") String type, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "reconRiskBtw")
+	List<Feed> findByTypeAndThreatType_ReconIsTrueAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "malwareRiskBtwSince")
+	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+	
+	@RestResource(path = "webRiskBtwSince")
+	List<Feed> findByTypeAndThreatType_WebIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "bruteForceRiskBtwSince")
+	List<Feed> findByTypeAndThreatType_BruteForceIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "sipRiskBtwSince")
+	List<Feed> findByTypeAndThreatType_SipIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "possibleCompromiseRiskBtwSince")
+	List<Feed> findProjectedByTypeAndThreatType_PossibleCompromiseIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "dbRiskBtwSince")
+	List<Feed> findByTypeAndThreatType_DbIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+
+	@RestResource(path = "reconRiskBtwSince")
+	List<Feed> findByTypeAndThreatType_ReconIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+
+	
 
 	@RestResource(path = "reconRiskGreater")
 	List<Feed> findByTypeAndThreatType_ReconIsTrueAndRiskFactorGreaterThan(@Param("type") String type,
@@ -202,26 +248,26 @@ public interface FeedRepository extends CrudRepository<Feed, String> {
 			@Param("end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end);
 
 	@RestResource(path = "confidenceLessThan")
-	List<Feed> findByConfidenceLessThan(@Param("confidenceLessThan") double confidence);
+	List<Feed> findByConfidenceLessThan(@Param("lt") double confidence);
 
 	@RestResource(path = "confidenceGreaterThan")
-	List<Feed> findByConfidenceGreaterThan(@Param("confidenceGreaterThan") double confidence);
+	List<Feed> findByConfidenceGreaterThan(@Param("gt") double confidence);
 
 	@RestResource(path = "confidence")
 	List<Feed> findByConfidenceIs(@Param("conf") double confidence);
 
 	@RestResource(path = "riskFactor")
-	List<Feed> findByRiskFactorIs(@Param("risk") double riskFactor);
+	List<Feed> findByRiskFactorIs(@Param("gt") double riskFactor);
 
 	@RestResource(path = "riskFactorLessThan")
-	List<Feed> findByRiskFactorLessThan(@Param("risk") double riskFactor);
+	List<Feed> findByRiskFactorLessThan(@Param("lt") double riskFactor);
 
 	@RestResource(path = "riskFactorGreaterThan")
-	List<Feed> findByRiskFactorGreaterThan(@Param("risk") double riskFactor);
+	List<Feed> findByRiskFactorGreaterThan(@Param("gt") double riskFactor);
 
 	@RestResource(path = "condensed")
 	List<IndicatorOnly> findProjectedByTypeAndLastSeenAfter(@Param("type") String type,
-			@Param("after") LocalDateTime time);
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime time);
 
 	// riskfactor less than && greater than
 	// threat type ==

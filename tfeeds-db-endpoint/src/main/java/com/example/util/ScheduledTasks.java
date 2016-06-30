@@ -23,7 +23,7 @@ public class ScheduledTasks {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	@Scheduled(fixedRate = 1000 * 60 * 3)
+	@Scheduled(fixedRate = 1000 * 60 * 40)
 	public void reportCurrentTime() {
 		System.out.println("Syncing with Feeds Repository... \n"
 				+ " Start time:  " + dateFormat.format(new Date()));

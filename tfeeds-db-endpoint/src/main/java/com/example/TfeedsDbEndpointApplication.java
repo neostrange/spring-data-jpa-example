@@ -27,7 +27,7 @@ import com.mysema.query.types.Predicate;
 
 
 @SpringBootApplication
-@RestController
+//@RestController
 @EntityScan(basePackages = {"com.example.model"})
 @EnableJpaRepositories(basePackages = {"com.example.repository"})
 @EnableTransactionManagement
@@ -52,26 +52,26 @@ public class TfeedsDbEndpointApplication {
 	IfeedRepository feedRepo;
 	
 
-	@RequestMapping("/push")
-	public @ResponseBody List<Feed> getFeeds() throws ExecutionException, InterruptedException {
-		
-		Map<Object,Object> feeds = feedRepo.findAllFeeds();
-		
-		//final List<Feed> list = objectMapper.convertValue(feeds, Feed.class);
-		
-		
-		List<Feed> feedList = new ArrayList<Feed>();
-		
-		for(Map.Entry<Object, Object> entry: feeds.entrySet()){
-			
-			feedList.add((Feed) entry.getValue());
-		}
-		
-		feedRepository.save(feedList);
-		
-		System.out.println(feedRepository.findAll().iterator().next().getIndicator());
-
-		return feedList;
-	}
+//	@RequestMapping("/push")
+//	public @ResponseBody List<Feed> getFeeds() throws ExecutionException, InterruptedException {
+//		
+//		Map<Object,Object> feeds = feedRepo.findAllFeeds();
+//		
+//		//final List<Feed> list = objectMapper.convertValue(feeds, Feed.class);
+//		
+//		
+//		List<Feed> feedList = new ArrayList<Feed>();
+//		
+//		for(Map.Entry<Object, Object> entry: feeds.entrySet()){
+//			
+//			feedList.add((Feed) entry.getValue());
+//		}
+//		
+//		feedRepository.save(feedList);
+//		
+//		System.out.println(feedRepository.findAll().iterator().next().getIndicator());
+//
+//		return feedList;
+//	}
 
 }
