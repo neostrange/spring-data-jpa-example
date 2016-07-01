@@ -3,7 +3,6 @@ package com.example.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.Description;
@@ -154,7 +153,7 @@ public interface FeedRepository extends PagingAndSortingRepository<Feed, String>
 	List<Feed> findByTypeAndThreatType_DbIsTrueAndRiskFactorBetween(@Param("type") String type, @Param("gt") double gt, @Param("lt") double lt);
 
 	@RestResource(path = "reconRiskBtw")
-	List<Feed> findByTypeAndThreatType_ReconIsTrueAndRiskFactorBetween(@Param("type") String type, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since, @Param("gt") double gt, @Param("lt") double lt);
+	List<Feed> findByTypeAndThreatType_ReconIsTrueAndRiskFactorBetween(@Param("type") String type, @Param("gt") double gt, @Param("lt") double lt);
 
 	@RestResource(path = "malwareRiskBtwSince")
 	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndLastSeenAfterAndRiskFactorBetween(@Param("type") String type,
