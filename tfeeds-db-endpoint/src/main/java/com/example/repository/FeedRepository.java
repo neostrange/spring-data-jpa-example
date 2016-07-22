@@ -3,6 +3,8 @@ package com.example.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.Description;
@@ -14,10 +16,19 @@ import com.example.model.Feed;
 import com.example.model.IndicatorOnly;
 
 @RepositoryRestResource(collectionResourceRel = "feed", path = "feed")
-public interface FeedRepository extends PagingAndSortingRepository<Feed, String> {
+public interface FeedRepository extends PagingAndSortingRepository<Feed, String>, CrudRepository<Feed, String> {
 
 	@RestResource(path = "all", description = @Description("Full feed including details"))
 	List<Feed> findByType(@Param("type") String type);
+
+	@RestResource(path = "allNotNull", description = @Description("Full feed including details"))
+	List<Feed> findByTypeAndTimestampNotNullAndExpiryNotNull(@Param("type") String type, Pageable p);
+
+	@RestResource(path = "total", description = @Description("Count by type"))
+	Long countByType(@Param("type") String type);
+	
+	@RestResource(path = "totalNotNull", description = @Description("Count by type"))
+	Long countByTypeAndTimestampNotNullAndExpiryNotNull(@Param("type") String type);
 
 	@RestResource(path = "allSince", description = @Description("Full feed including details"))
 	List<Feed> findByTypeAndLastSeenAfter(@Param("type") String type,
@@ -313,6 +324,5 @@ public interface FeedRepository extends PagingAndSortingRepository<Feed, String>
 	@RestResource(path = "condensed")
 	List<IndicatorOnly> findProjectedByTypeAndLastSeenAfter(@Param("type") String type,
 			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime time);
-
 
 }
