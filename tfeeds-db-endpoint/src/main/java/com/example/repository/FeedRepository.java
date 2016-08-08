@@ -20,6 +20,9 @@ public interface FeedRepository extends PagingAndSortingRepository<Feed, String>
 
 	@RestResource(path = "all", description = @Description("Full feed including details"))
 	List<Feed> findByType(@Param("type") String type);
+	
+	@RestResource(path = "allPaged", description = @Description("Full feed including details"))
+	List<Feed> findByType(@Param("type") String type, Pageable p);
 
 	@RestResource(path = "allNotNull", description = @Description("Full feed including details"))
 	List<Feed> findByTypeAndTimestampNotNullAndExpiryNotNull(@Param("type") String type, Pageable p);
@@ -29,7 +32,7 @@ public interface FeedRepository extends PagingAndSortingRepository<Feed, String>
 	
 	@RestResource(path = "totalNotNull", description = @Description("Count by type"))
 	Long countByTypeAndTimestampNotNullAndExpiryNotNull(@Param("type") String type);
-
+	
 	@RestResource(path = "allSince", description = @Description("Full feed including details"))
 	List<Feed> findByTypeAndLastSeenAfter(@Param("type") String type,
 			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
