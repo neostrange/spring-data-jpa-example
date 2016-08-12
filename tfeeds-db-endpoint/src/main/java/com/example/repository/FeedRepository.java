@@ -3,6 +3,7 @@ package com.example.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -15,23 +16,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.model.Feed;
 import com.example.model.IndicatorOnly;
 
-@RepositoryRestResource(collectionResourceRel = "feed", path = "feed")
+@RepositoryRestResource(collectionResourceRel = "feed", path = "feed", excerptProjection = IndicatorOnly.class)
 public interface FeedRepository extends PagingAndSortingRepository<Feed, String>, CrudRepository<Feed, String> {
 
 	@RestResource(path = "all", description = @Description("Full feed including details"))
-	List<Feed> findByType(@Param("type") String type);
-
-	@RestResource(path = "allPaged", description = @Description("Full feed including details"))
-	List<Feed> findByType(@Param("type") String type, Pageable p);
+	Page<Feed> findByTypeAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist, Pageable p);
 
 	@RestResource(path = "allNotNull", description = @Description("Full feed including details"))
-	List<Feed> findByTypeAndTimestampNotNullAndExpiryNotNull(@Param("type") String type, Pageable p);
+	Page<Feed> findByTypeAndTimestampNotNullAndExpiryNotNullAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist, Pageable p);
 
 	@RestResource(path = "total", description = @Description("Count by type"))
-	Long countByType(@Param("type") String type);
+	Long countByTypeAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist);
 
 	@RestResource(path = "totalNotNull", description = @Description("Count by type"))
-	Long countByTypeAndTimestampNotNullAndExpiryNotNull(@Param("type") String type);
+	Long countByTypeAndTimestampNotNullAndExpiryNotNullAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist);
 
 	@RestResource(path = "allSince", description = @Description("Full feed including details"))
 	List<Feed> findByTypeAndLastSeenAfter(@Param("type") String type,
@@ -95,73 +93,148 @@ public interface FeedRepository extends PagingAndSortingRepository<Feed, String>
 			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since);
 
 	// Whitelisted
-
-	List<Feed> findByTypeAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
+	
+	List<Feed> findByTypeOrThreatType_MalwareOrThreatType_BruteForceOrThreatType_DbOrThreatType_WebOrThreatType_SipOrThreatType_ReconOrThreatType_PossibleCompromiseAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@Param("mal") boolean mal,
+			@Param("bruteForce") boolean bruteForce,
+			@Param("db") boolean db,
+			@Param("web") boolean web,
+			@Param("sip") boolean sip,
+			@Param("recon") boolean recon,
+			@Param("pComp") boolean possibleCompromise,
 			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
-			@Param("list") List<String> whitelist);
-
-	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
-			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
-			@Param("list") List<String> whitelist);
-
-	List<Feed> findByTypeAndThreatType_BruteForceIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
-			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
-			@Param("list") List<String> whitelist);
-
-	List<Feed> findByTypeAndThreatType_SipIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
-			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
-			@Param("list") List<String> whitelist);
-
-	List<Feed> findByTypeAndThreatType_PossibleCompromiseIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
-			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
-			@Param("list") List<String> whitelist);
-
-	List<Feed> findByTypeAndThreatType_DbIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
-			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
-			@Param("list") List<String> whitelist);
-
-	List<Feed> findByTypeAndThreatType_WebIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
-			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
 			@Param("list") List<String> whitelist);
 	
-	List<Feed> findByTypeAndThreatType_ReconIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(@Param("type") String type,
+	List<IndicatorOnly> findProjectedByTypeOrThreatType_MalwareOrThreatType_BruteForceOrThreatType_DbOrThreatType_WebOrThreatType_SipOrThreatType_ReconOrThreatType_PossibleCompromiseAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@Param("mal") boolean mal,
+			@Param("bruteForce") boolean bruteForce,
+			@Param("db") boolean db,
+			@Param("web") boolean web,
+			@Param("sip") boolean sip,
+			@Param("recon") boolean recon,
+			@Param("pComp") boolean possibleCompromise,
 			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
-			@Param("cgt") double confidenceGreaterThan, 
-			@Param("clt") double confidenceLessThan, 
-			@Param("rgt") double riskGreaterThan, 
-			@Param("rlt") double riskLessThan,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
 			@Param("list") List<String> whitelist);
 
+	List<Feed> findByTypeAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+	
+	List<IndicatorOnly> findProjectedByTypeAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
+	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+	
+	List<IndicatorOnly> findProjectedByTypeAndThreatType_MalwareIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
+	List<Feed> findByTypeAndThreatType_BruteForceIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+	
+	List<IndicatorOnly> findProjectedByTypeAndThreatType_BruteForceIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
+	List<Feed> findByTypeAndThreatType_SipIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+	
+	List<IndicatorOnly> findProjectedByTypeAndThreatType_SipIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
+	List<Feed> findByTypeAndThreatType_PossibleCompromiseIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
+	List<IndicatorOnly> findProjectedByTypeAndThreatType_PossibleCompromiseIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
 
 	
+	List<Feed> findByTypeAndThreatType_DbIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+	
+	List<IndicatorOnly> findProjectedByTypeAndThreatType_DbIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
+	List<Feed> findByTypeAndThreatType_WebIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+	
+	List<IndicatorOnly> findProjectedByTypeAndThreatType_WebIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
+	List<Feed> findByTypeAndThreatType_ReconIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+	
+	List<IndicatorOnly> findProjectedByTypeAndThreatType_ReconIsTrueAndLastSeenAfterAndConfidenceBetweenAndRiskFactorBetweenAndIndicatorNotIn(
+			@Param("type") String type,
+			@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @Param("since") LocalDateTime since,
+			@Param("cgt") double confidenceGreaterThan, @Param("clt") double confidenceLessThan,
+			@Param("rgt") double riskGreaterThan, @Param("rlt") double riskLessThan,
+			@Param("list") List<String> whitelist);
+
 	@RestResource(path = "malwareConfidenceGreater")
 	List<Feed> findByTypeAndThreatType_MalwareIsTrueAndConfidenceGreaterThan(@Param("type") String type,
 			@Param("gt") double confidence);
