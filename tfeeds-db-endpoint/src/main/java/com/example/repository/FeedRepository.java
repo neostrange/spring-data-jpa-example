@@ -19,16 +19,12 @@ import com.example.model.IndicatorOnly;
 @RepositoryRestResource(collectionResourceRel = "feed", path = "feed", excerptProjection = IndicatorOnly.class)
 public interface FeedRepository extends PagingAndSortingRepository<Feed, String>, CrudRepository<Feed, String> {
 
-	@RestResource(path = "all", description = @Description("Full feed including details"))
 	Page<Feed> findByTypeAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist, Pageable p);
 
-	@RestResource(path = "allNotNull", description = @Description("Full feed including details"))
 	Page<Feed> findByTypeAndTimestampNotNullAndExpiryNotNullAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist, Pageable p);
 
-	@RestResource(path = "total", description = @Description("Count by type"))
 	Long countByTypeAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist);
 
-	@RestResource(path = "totalNotNull", description = @Description("Count by type"))
 	Long countByTypeAndTimestampNotNullAndExpiryNotNullAndIndicatorNotIn(@Param("type") String type, @Param("list")List<String> whitelist);
 
 	@RestResource(path = "allSince", description = @Description("Full feed including details"))
