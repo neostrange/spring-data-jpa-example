@@ -35,11 +35,7 @@ public class DataLoader {
 		Map<Object, Object> feeds = feedRepo.findAllFeeds();
 
 		List<Feed> feedList = new ArrayList<Feed>();
-
-		for (Map.Entry<Object, Object> entry : feeds.entrySet()) {
-
-			feedList.add((Feed) entry.getValue());
-		}
+		feeds.entrySet().forEach(entry -> feedList.add((Feed) entry.getValue()));
 
 		feedRepository.save(feedList);
 	}

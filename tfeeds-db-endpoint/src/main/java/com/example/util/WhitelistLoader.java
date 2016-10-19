@@ -6,11 +6,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,25 +30,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class WhitelistLoader {
 
-	public static List<String> whitelist = null;
+	public static LocalDateTime nextUpdate = null;
+	
+	public static HashSet<String> whitelist = new HashSet<String>();
 
-	private static Semaphore mutex = new Semaphore(1);
+	private static final Logger logger = LoggerFactory.getLogger(WhitelistLoader.class);
 
-	@Value(value = "${ti.user}")
-	private String username;
-	@Value(value = "${ti.password}")
-	private String password;
+	private static String username;
 
-	public void fetchWhitelist(String url) {
-		try {
-			mutex.acquire();
-		} catch (InterruptedException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+	private static String password;
+
+	private static String url;
+
+	@Autowired
+	public WhitelistLoader(@Value("${whitelist.url}") String url, @Value("${ti.user}") String username,
+			@Value("${ti.password}") String password) {
+		WhitelistLoader.username = username;
+		WhitelistLoader.password = password;
+		WhitelistLoader.url = url;
+	}
+
+	/**
+	 * @param url
+	 */
+	@PostConstruct
+	public synchronized static void fetchWhitelist() {
 		URL whitelistUrl = null;
-
 		try {
+			logger.info("Trying to get whitelist...");
 			HttpURLConnection connection = null;
 			String userCredentials = username + ":" + password;
 			String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
@@ -53,13 +66,14 @@ public class WhitelistLoader {
 			String line = null;
 			JsonNode node = null;
 			BufferedReader reader = null;
-			System.out.println("Getting response...");
+			HashSet<String> tempList = new HashSet<String>();
+
 			while (!last) {
 				try {
 					whitelistUrl = new URL(url + page);
 				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logger.error("", e1);
+					break;
 				}
 				connection = (HttpURLConnection) whitelistUrl.openConnection();
 				connection.setRequestProperty("Authorization", basicAuth);
@@ -67,62 +81,65 @@ public class WhitelistLoader {
 
 				code = connection.getResponseCode();
 				if (code == 200) {
+
 					reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 					while ((line = reader.readLine()) != null) {
 						node = new ObjectMapper().readValue(line, JsonNode.class);
+					}
+
+					if (node.get("first").asBoolean()) {
+						nextUpdate = LocalDateTime.now().plusMinutes(15);
 					}
 
 					// whether it's the last page
 					last = node.get("last").asBoolean();
 
 					if (node.has("content")) {
-						whitelist = new ArrayList<String>();
-						System.out.println(node.toString());
-						node.get("content").findValues("ip").forEach(n -> whitelist.add(n.asText()));
+						node.get("content").findValues("ip").forEach(n -> tempList.add(n.asText()));
 					}
+
 				} else {
-					System.out.println("Error Code: " + code);
-					System.out.println(connection.getResponseMessage());
+					logger.error("Error code [{}] encountered when trying to fetch Whitelist.", code);
+					break;
 				}
 				page++;
-			} 
-			mutex.release();
+			}
+
+			if (tempList != null) {
+				whitelist.clear();
+				whitelist.addAll(tempList);
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("", e);
 		}
 
 	}
 
-	public static List<String> getWhitelist() {
-		do {
-			System.out.println("Checking to see if mutex is available.");
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	/**
+	 * 
+	 * @return
+	 */
+	public static HashSet<String> getWhitelist() {
+		// if whitelist is not set or whitelist was updated more than 15 mins
+		// ago
+		
+		try {
+			if (nextUpdate.isBefore(LocalDateTime.now())) {
+				fetchWhitelist();
+				whitelist.add("127.0.0.1");
+				logger.info("Whitelist next update after [{}]", nextUpdate.toLocalTime());
 			}
-		} while (!(mutex.availablePermits() > 0));
-		System.out.println("Whitelist size: " + whitelist.size());
+		} catch (NullPointerException ex) {
+			fetchWhitelist();
+		}
 		return whitelist;
 	}
-	
-	public static String getWhitelist(Boolean tostring) {
-		do {
-			System.out.println("Checking to see if mutex is available.");
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} while (!(mutex.availablePermits() > 0));
-		System.out.println("Whitelist size: " + whitelist.size());
-		return whitelist.toString();
-	}
 
-	public void setWhitelist(List<String> whitelist) {
+	/**
+	 * 
+	 * @param whitelist
+	 */
+	public void setWhitelist(HashSet<String> whitelist) {
 		WhitelistLoader.whitelist = whitelist;
 	}
 

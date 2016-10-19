@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.util.LocalDateTimeAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
@@ -45,22 +46,22 @@ public class Feed implements Serializable {
 	
 	private String description;
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@Convert(converter = LocalDateTimeAttributeConverter.class)
+//	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+//	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+//	@JsonSerialize(using = LocalDateTimeSerializer.class)
+//	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime firstSeen;
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@Convert(converter = LocalDateTimeAttributeConverter.class)
+//	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+//	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+//	@JsonSerialize(using = LocalDateTimeSerializer.class)
+//	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime lastSeen;
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@Convert(converter = LocalDateTimeAttributeConverter.class)
+//	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+//	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+//	@JsonSerialize(using = LocalDateTimeSerializer.class)
+//	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime timestamp;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -68,15 +69,6 @@ public class Feed implements Serializable {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime expiry;
-
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	public LocalDateTime getExpiry() {
-		return expiry;
-	}
-
-	public void setExpiry(LocalDateTime expiry) {
-		this.expiry = expiry;
-	}
 
 	private double riskFactor;
 
@@ -120,6 +112,7 @@ public class Feed implements Serializable {
 		this.indicator = indicator;
 	}
 
+	@JsonIgnore	
 	public String getType() {
 		return type;
 	}
@@ -128,6 +121,7 @@ public class Feed implements Serializable {
 		this.type = type;
 	}
 
+	@JsonIgnore
 	public String getTitle() {
 		return title;
 	}
@@ -136,6 +130,7 @@ public class Feed implements Serializable {
 		this.title = title;
 	}
 
+	@JsonIgnore
 	public String getDescription() {
 		return description;
 	}
@@ -144,7 +139,8 @@ public class Feed implements Serializable {
 		this.description = description;
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonIgnore
+//	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public LocalDateTime getFirstSeen() {
 		return firstSeen;
 	}
@@ -153,7 +149,8 @@ public class Feed implements Serializable {
 		this.firstSeen = firstSeen;
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonIgnore
+//	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public LocalDateTime getLastSeen() {
 		return lastSeen;
 	}
@@ -162,7 +159,8 @@ public class Feed implements Serializable {
 		this.lastSeen = lastSeen;
 	}
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonIgnore
+//	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
@@ -172,6 +170,15 @@ public class Feed implements Serializable {
 	}
 
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	public LocalDateTime getExpiry() {
+		return expiry;
+	}
+
+	public void setExpiry(LocalDateTime expiry) {
+		this.expiry = expiry;
+	}
+
 	public double getRiskFactor() {
 		return riskFactor;
 	}
@@ -180,6 +187,7 @@ public class Feed implements Serializable {
 		this.riskFactor = riskFactor;
 	}
 
+	@JsonIgnore
 	public double getConfidence() {
 		return confidence;
 	}
@@ -188,6 +196,7 @@ public class Feed implements Serializable {
 		this.confidence = confidence;
 	}
 
+	@JsonIgnore
 	public IncidentStats getIncidentStats() {
 		return incidentStats;
 	}
@@ -196,6 +205,7 @@ public class Feed implements Serializable {
 		this.incidentStats = incidentStats;
 	}
 
+	@JsonIgnore
 	public String getSource() {
 		return source;
 	}
@@ -204,6 +214,7 @@ public class Feed implements Serializable {
 		this.source = source;
 	}
 
+	@JsonIgnore
 	public String getTlpLevel() {
 		return tlpLevel;
 	}
@@ -212,6 +223,7 @@ public class Feed implements Serializable {
 		this.tlpLevel = tlpLevel;
 	}
 
+	@JsonIgnore
 	public TTPType getTtpType() {
 		return ttpType;
 	}
@@ -220,6 +232,7 @@ public class Feed implements Serializable {
 		this.ttpType = ttpType;
 	}
 	
+	@JsonIgnore
 	public ThreatType getThreatType() {
 		return threatType;
 	}
@@ -228,6 +241,7 @@ public class Feed implements Serializable {
 		this.threatType = threatType;
 	}
 
+	@JsonIgnore
 	public SuggestedCOA getSuggestedCOA() {
 		return suggestedCOA;
 	}
